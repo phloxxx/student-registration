@@ -1,0 +1,96 @@
+{% extends 'base.html'%}
+{% block content %}
+    {% with messages = get_flashed_messages()%}
+        {% if messages%}
+            {% for message in messages %}
+                <div class="w3-panel w3-padding w3-green">
+                    <b>{{ message }}</b>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="w3-row-padding">
+        <div class="w3-third">
+            <div class="w3-card-4 w3-container w3-padding">
+                <form action="/saveinformation" method="post" enctype="multipart/form-data">
+                    {% if edit_student %}
+                        <input type="hidden" name="student_id" value="{{ edit_student.id }}">
+                    {% endif %}
+                    <p class="w3-center">
+                        <label for="imageupload">
+                            <img id="image" src="{{ url_for('static', filename=edit_student.image.replace('static/', '')) if edit_student else url_for('static',filename='images/personicon.jpg') }}" style="width:30%">
+                            <input id="imageupload" type="file" name="imageupload" style="display:none" onchange="readURL(this)" {% if not edit_student %}required{% endif %}>
+                        </label>
+                    </p>
+                    <p>
+                        <label><b>IDNO</b></label>
+                        <input type="text" name="idno" class="w3-input" value="{{ edit_student.idno if edit_student else '' }}" required>
+                    </p>
+                    <p>
+                        <label><b>LASTNAME</b></label>
+                        <input type="text" name="lastname" class="w3-input" value="{{ edit_student.lastname if edit_student else '' }}" required>
+                    </p>
+                    <p>
+                        <label><b>FIRSTNAME</b></label>
+                        <input type="text" name="firstname" class="w3-input" value="{{ edit_student.firstname if edit_student else '' }}" required>
+                    </p>
+                    <p>
+                        <label><b>COURSE</b></label>
+                        <input type="text" name="course" class="w3-input" value="{{ edit_student.course if edit_student else '' }}" required>
+                    </p>
+                    <p>
+                        <label><b>LEVEL</b></label>
+                        <input type="text" name="level" class="w3-input" value="{{ edit_student.level if edit_student else '' }}" required>
+                    </p>
+                    <p class="w3-section w3-center">
+                        <button type="submit" class="w3-button w3-indigo">
+                            {{ 'Update' if edit_student else 'Save' }}
+                        </button>
+                        <a href="{{ url_for('index') }}" class="w3-button w3-red">Cancel</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+        <div class="w3-twothird">
+            <table class="w3-table-all">
+                <tr>
+                    <th>IDNO</th>
+                    <th class="w3-hide-small w3-hide-medium">LASTNAME</th>
+                    <th class="w3-hide-small w3-hide-medium">FIRSTNAME</th>
+                    <th class="w3-hide-large w3-hide-medium">NAME</th>
+                    <th class="w3-hide-small w3-hide-medium">COURSE</th>
+                    <th class="w3-hide-large w3-hide-medium">COURSE-LEVEL</th>
+                    <th class="w3-hide-small w3-hide-medium">LEVEL</th>
+                    <th>ACTION</th>
+                </tr>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student[1]}}</td>
+                    <td class="w3-hide-small w3-hide-medium">{{ student[2]}}</td>
+                    <td class="w3-hide-small w3-hide-medium">{{ student[3]}}</td>
+                    <td class="w3-hide-large w3-hide-medium">{{ student[2]}},{{ student[3]}}</td>
+                    <td class="w3-hide-small w3-hide-medium">{{ student[4]}}</td>
+                    <td class="w3-hide-small w3-hide-medium">{{ student[5]}}</td>
+                    <td class="w3-hide-large w3-hide-medium">{{ student[4]}}-{{ student[5]}}</td>
+                    <td>
+                        <a href="{{ url_for('edit', id=student[0]) }}" class="w3-button w3-indigo w3-tiny">&#9998;</a>
+                        <a href="{{ url_for('delete', id=student[0]) }}" class="w3-button w3-red w3-tiny" onclick="return confirm('Are you sure you want to delete this student?')">&#128465;</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <script>
+        function readURL(input){
+            if(input.files && input.files[0]){
+                reader = new FileReader();
+                reader.onload = function(e){
+                    document.getElementById('image').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+{% endblock %}

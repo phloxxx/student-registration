@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie-edge,safari">
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/w3.css')}}">
+		<title>Student Information V1.0</title>
+	</head>
+	<body>
+		<div class="w3-bar w3-container w3-padding w3-indigo" style="position:sticky;top:0;">
+			<h3>{{ pagetitle }}</h3>
+		</div>
+		<div class="w3-container w3-padding">
+			{% block content %}
+			{% endblock %}
+			<hr/>
+			<div class="w3-center">
+				&copy;copyright 2024, DURANO, JHANNA KRIS
+			</div>
+		</div>
+	</body>
+</html>
